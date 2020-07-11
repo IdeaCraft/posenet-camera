@@ -5,6 +5,7 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
 import java.util.*
+import kotlin.collections.HashMap
 
 class DartMessenger(messenger: BinaryMessenger?, eventChannelId: Long) {
     private var eventSink: EventSink? = null
@@ -23,6 +24,7 @@ class DartMessenger(messenger: BinaryMessenger?, eventChannelId: Long) {
         }
         val event: MutableMap<String, String?> = HashMap()
         event["eventType"] = eventType.toString().toLowerCase(Locale.ROOT)
+
         // Only errors have a description.
         if (eventType == EventType.ERROR && !TextUtils.isEmpty(description)) {
             event["errorDescription"] = description

@@ -7,13 +7,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
-import android.graphics.Matrix
 import android.hardware.camera2.*
 import android.media.CamcorderProfile
-import android.media.Image
 import android.media.ImageReader
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.util.Log
 import android.util.Size
 import android.view.OrientationEventListener
@@ -22,6 +21,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.view.TextureRegistry.SurfaceTextureEntry
 import java.nio.ByteBuffer
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -31,7 +31,8 @@ class Camera(
         flutterTexture: SurfaceTextureEntry,
         dartMessenger: DartMessenger,
         cameraName: String?,
-        resolutionPreset: String?) {
+        resolutionPreset: String?,
+        posenetChannel: PosenetChannel) {
     private val MODEL_WIDTH = 257
     private val MODEL_HEIGHT = 257
     private var activity: Activity? = null
@@ -49,6 +50,7 @@ class Camera(
     private var cameraCaptureSession: CameraCaptureSession? = null
     private var pictureImageReader: ImageReader? = null
     private val dartMessenger: DartMessenger
+    private val posenetChannel: PosenetChannel
     private var captureRequestBuilder: CaptureRequest.Builder? = null
     private val recordingProfile: CamcorderProfile?
     private var currentOrientation = OrientationEventListener.ORIENTATION_UNKNOWN
@@ -61,8 +63,14 @@ class Camera(
     /** A [Handler] for running tasks in the background. */
     private var backgroundHandler: Handler? = null
 
+    /** A [Handler] for sending pose data to dart using main thread */
+    private val uiThreadHandler: Handler = Handler(Looper.getMainLooper())
+
     /** An object for the Posenet library. */
     private lateinit var posenet: Posenet
+
+    /** An HashMap to store Person */
+    private lateinit var person: HashMap<String, Any>
 
     // Mirrors camera.dart
     enum class ResolutionPreset {
@@ -92,8 +100,9 @@ class Camera(
                             runClassifier = true
 
                             startBackgroundThread(periodicClassify)
+
                         } catch (e: CameraAccessException) {
-                            result.error("CameraAccess", e.message, null)
+                            result.error("CameraAccess", e.message, "Error opening the Camera.")
                             close()
                             return
                         }
@@ -203,7 +212,7 @@ class Camera(
     }
 
     /** Runs [estimateSinglePose)] from posenet */
-    private fun performInference(bitmap: Bitmap): Person {
+    private fun performInference(bitmap: Bitmap): HashMap<String, Any> {
         // Crop bitmap
         val croppedBitmap = cropBitmap(bitmap)
         Log.d(TAG, "=> croppedBitmap H: ${croppedBitmap.height}")
@@ -251,9 +260,15 @@ class Camera(
         image.close()
 
         // Perform inference
-        val output = performInference(imageBitmap)
-        Log.d(TAG, "=> Output (score): ${output.score}")
-//        Log.d(TAG, "=> Output (key points): ${output.keyPoints}")
+        person = performInference(imageBitmap)
+
+        uiThreadHandler.post(
+            Runnable {
+                Log.d(TAG, "=> Output (score): ${person["score"]}")
+                Log.d(TAG, "=> Output (key points): ${person["keyPoints"]}")
+                posenetChannel.send(person)
+            }
+        )
 
         imageBitmap.recycle()
 
@@ -379,6 +394,7 @@ class Camera(
         this.cameraName = cameraName
         this.flutterTexture = flutterTexture
         this.dartMessenger = dartMessenger
+        this.posenetChannel = posenetChannel
         cameraManager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         orientationEventListener = object : OrientationEventListener(activity.applicationContext) {
             override fun onOrientationChanged(i: Int) {
@@ -391,7 +407,6 @@ class Camera(
         }
         orientationEventListener.enable()
         val characteristics = cameraManager.getCameraCharacteristics(cameraName)
-        val streamConfigurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
         sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
         isFrontFacing = characteristics.get(CameraCharacteristics.LENS_FACING) == CameraMetadata.LENS_FACING_FRONT
         val preset = ResolutionPreset.valueOf(resolutionPreset!!)

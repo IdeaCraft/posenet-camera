@@ -28,41 +28,27 @@ import kotlin.math.exp
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.gpu.GpuDelegate
 
-enum class BodyPart {
-  NOSE,
-  LEFT_EYE,
-  RIGHT_EYE,
-  LEFT_EAR,
-  RIGHT_EAR,
-  LEFT_SHOULDER,
-  RIGHT_SHOULDER,
-  LEFT_ELBOW,
-  RIGHT_ELBOW,
-  LEFT_WRIST,
-  RIGHT_WRIST,
-  LEFT_HIP,
-  RIGHT_HIP,
-  LEFT_KNEE,
-  RIGHT_KNEE,
-  LEFT_ANKLE,
-  RIGHT_ANKLE
-}
+//enum class BodyPart {
+//  NOSE,
+//  LEFT_EYE,
+//  RIGHT_EYE,
+//  LEFT_EAR,
+//  RIGHT_EAR,
+//  LEFT_SHOULDER,
+//  RIGHT_SHOULDER,
+//  LEFT_ELBOW,
+//  RIGHT_ELBOW,
+//  LEFT_WRIST,
+//  RIGHT_WRIST,
+//  LEFT_HIP,
+//  RIGHT_HIP,
+//  LEFT_KNEE,
+//  RIGHT_KNEE,
+//  LEFT_ANKLE,
+//  RIGHT_ANKLE
+//}
 
-class Position {
-  var x: Int = 0
-  var y: Int = 0
-}
-
-class KeyPoint {
-  var bodyPart: BodyPart = BodyPart.NOSE
-  var position: Position = Position()
-  var score: Float = 0.0f
-}
-
-class Person {
-  var keyPoints = listOf<KeyPoint>()
-  var score: Float = 0.0f
-}
+val person: HashMap<String, Any> = java.util.HashMap()
 
 enum class Device {
   CPU,
@@ -194,7 +180,7 @@ class Posenet(
    *      person: a Person object containing data about keypoint locations and confidence scores
    */
   @Suppress("UNCHECKED_CAST")
-  fun estimateSinglePose(bitmap: Bitmap): Person {
+  fun estimateSinglePose(bitmap: Bitmap): HashMap<String, Any> {
     val estimationStartTimeNanos = SystemClock.elapsedRealtimeNanos()
     val inputArray = arrayOf(initInputArray(bitmap))
     Log.i(
@@ -244,9 +230,14 @@ class Posenet(
     val xCoords = IntArray(numKeypoints)
     val yCoords = IntArray(numKeypoints)
     val confidenceScores = FloatArray(numKeypoints)
+    val coordsArray = arrayListOf<HashMap<String, Any>>()
+    var totalScore = 0.0f
+
     keypointPositions.forEachIndexed { idx, position ->
       val positionY = keypointPositions[idx].first
       val positionX = keypointPositions[idx].second
+      val keyPoint = HashMap<String, Any>()
+
       yCoords[idx] = (
         position.first / (height - 1).toFloat() * bitmap.height +
           offsets[0][positionY][positionX][idx]
@@ -257,21 +248,16 @@ class Posenet(
           [positionX][idx + numKeypoints]
         ).toInt()
       confidenceScores[idx] = sigmoid(heatmaps[0][positionY][positionX][idx])
-    }
 
-    val person = Person()
-    val keypointList = Array(numKeypoints) { KeyPoint() }
-    var totalScore = 0.0f
-    enumValues<BodyPart>().forEachIndexed { idx, it ->
-      keypointList[idx].bodyPart = it
-      keypointList[idx].position.x = xCoords[idx]
-      keypointList[idx].position.y = yCoords[idx]
-      keypointList[idx].score = confidenceScores[idx]
+      keyPoint["x"] = xCoords[idx]
+      keyPoint["y"] = yCoords[idx]
+      keyPoint["score"] = confidenceScores[idx]
+      coordsArray.add(keyPoint)
+
       totalScore += confidenceScores[idx]
     }
-
-    person.keyPoints = keypointList.toList()
-    person.score = totalScore / numKeypoints
+    person["keyPoints"] = coordsArray
+    person["score"] = totalScore / numKeypoints
 
     return person
   }

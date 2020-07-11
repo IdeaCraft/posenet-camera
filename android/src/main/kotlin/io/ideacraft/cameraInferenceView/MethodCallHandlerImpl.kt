@@ -17,6 +17,8 @@ internal class MethodCallHandlerImpl(
         private val permissionsRegistry: PermissionsRegistry,
         private val textureRegistry: TextureRegistry) : MethodCallHandler {
     private val methodChannel: MethodChannel = MethodChannel(messenger, "plugins/cameraInferenceView")
+//    private val posenetOutputChannel: EventChannel = EventChannel(messenger, "plugins/posenetOutputStream")
+
     private var camera: Camera? = null
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
@@ -30,21 +32,22 @@ internal class MethodCallHandlerImpl(
                     camera!!.close()
                 }
                 cameraPermissions.requestPermissions(
-                        activity,
-                        permissionsRegistry,
-                        object : ResultCallback {
-                            override fun onResult(errorCode: String?, errorDescription: String?) {
-                                if (errorCode == null) {
-                                    try {
-                                        instantiateCamera(call, result)
-                                    } catch (e: Exception) {
-                                        handleException(e, result)
-                                    }
-                                } else {
-                                    result.error(errorCode, errorDescription, null)
+                    activity,
+                    permissionsRegistry,
+                    object : ResultCallback {
+                        override fun onResult(errorCode: String?, errorDescription: String?) {
+                            if (errorCode == null) {
+                                try {
+                                    instantiateCamera(call, result)
+                                } catch (e: Exception) {
+                                    handleException(e, result)
                                 }
+                            } else {
+                                result.error(errorCode, errorDescription, null)
                             }
-                        })
+                        }
+                    }
+                )
             }
             "dispose" -> {
                 if (camera != null) {
@@ -66,12 +69,16 @@ internal class MethodCallHandlerImpl(
         val resolutionPreset = call.argument<String>("resolutionPreset")
         val flutterSurfaceTexture = textureRegistry.createSurfaceTexture()
         val dartMessenger = DartMessenger(messenger, flutterSurfaceTexture.id())
+        val posenetChannel = PosenetChannel(messenger)
+
         camera = Camera(
                 activity,
                 flutterSurfaceTexture,
                 dartMessenger,
                 cameraName,
-                resolutionPreset)
+                resolutionPreset,
+                posenetChannel)
+
         camera!!.open(result)
     }
 

@@ -96,6 +96,20 @@ class _CameraExampleState extends State<CameraExample>
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 _cameraTogglesRowWidget(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                  child: (controller == null || !controller.value.isInitialized)
+                      ? Text('Not Inititlized')
+                      : StreamBuilder<dynamic>(
+                          stream: controller.posenetOutputStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null || !snapshot.hasData) {
+                              return Text('0.0');
+                            }
+                            return Text('${snapshot.data['score']}');
+                          },
+                        ),
+                ),
               ],
             ),
           ),
@@ -108,8 +122,7 @@ class _CameraExampleState extends State<CameraExample>
     if (controller != null) {
       await controller.dispose();
     }
-    controller =
-        CameraController(cameraDescription, ResolutionPreset.max);
+    controller = CameraController(cameraDescription, ResolutionPreset.max);
 
     // If the controller is updated then update the UI.
     controller.addListener(() {

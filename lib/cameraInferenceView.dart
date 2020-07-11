@@ -215,6 +215,7 @@ class CameraController extends ValueNotifier<CameraValue> {
   bool _isDisposed = false;
   StreamSubscription<dynamic> _eventSubscription;
   Completer<void> _creatingCompleter;
+  Stream _posenetOutputStream;
 
   /// Initializes the camera on the device.
   ///
@@ -244,6 +245,9 @@ class CameraController extends ValueNotifier<CameraValue> {
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
+    _posenetOutputStream =
+        EventChannel('plugins/posenetOutputStream').receiveBroadcastStream();
+
     _eventSubscription =
         EventChannel('cameraInferenceViewPlugin/cameraEvents$_textureId')
             .receiveBroadcastStream()
@@ -251,6 +255,9 @@ class CameraController extends ValueNotifier<CameraValue> {
     _creatingCompleter.complete();
     return _creatingCompleter.future;
   }
+
+  /// Stream to listen for Posenet output from the native plugins.
+  Stream<dynamic> get posenetOutputStream => _posenetOutputStream;
 
   /// Listen to events from the native plugins.
   ///
