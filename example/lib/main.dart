@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cameraInferenceView_example/draw.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -66,6 +69,8 @@ class _CameraExampleState extends State<CameraExample>
 
   @override
   Widget build(BuildContext context) {
+    Size screen = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('CameraInferenceView'),
@@ -73,21 +78,44 @@ class _CameraExampleState extends State<CameraExample>
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Container(
-              child: Center(
-                child: (controller == null || !controller.value.isInitialized)
-                    ? Text(
-                        'Camera Initializing',
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 24.0,
-                        ),
-                      )
-                    : AspectRatio(
-                        aspectRatio: controller.value.aspectRatio,
-                        child: CameraPreview(controller),
-                      ),
-              ),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  child: Center(
+                    child:
+                        (controller == null || !controller.value.isInitialized)
+                            ? Text(
+                                'Camera Initializing',
+                                style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: 24.0,
+                                ),
+                              )
+                            : AspectRatio(
+                                aspectRatio: controller.value.aspectRatio,
+                                child: CameraPreview(controller),
+                              ),
+                  ),
+                ),
+                (controller == null || !controller.value.isInitialized)
+                    ? Container()
+                    : StreamBuilder(
+                        stream: controller.posenetOutputStream,
+                        builder: (context, snapshot) {
+                          return Draw(
+                            results: snapshot.data == null || !snapshot.hasData
+                                ? []
+                                : snapshot.data['keyPoints'],
+                            previewH: 320,
+                            previewW: 240,
+                            screenH: screen.height,
+                            screenW: screen.width,
+                            isFrontFacing:
+                                controller.description.lensDirection ==
+                                    CameraLensDirection.front,
+                          );
+                        }),
+              ],
             ),
           ),
           Padding(
@@ -97,7 +125,7 @@ class _CameraExampleState extends State<CameraExample>
               children: <Widget>[
                 _cameraTogglesRowWidget(),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                  padding: const EdgeInsets.only(left: 32.0),
                   child: (controller == null || !controller.value.isInitialized)
                       ? Text('Not Inititlized')
                       : StreamBuilder<dynamic>(
@@ -106,7 +134,9 @@ class _CameraExampleState extends State<CameraExample>
                             if (snapshot.data == null || !snapshot.hasData) {
                               return Text('0.0');
                             }
-                            return Text('${snapshot.data['score']}');
+                            return Text(
+                              '${snapshot.data['score']}',
+                            );
                           },
                         ),
                 ),
@@ -122,7 +152,8 @@ class _CameraExampleState extends State<CameraExample>
     if (controller != null) {
       await controller.dispose();
     }
-    controller = CameraController(cameraDescription, ResolutionPreset.max);
+    controller =
+        CameraController(cameraDescription, ResolutionPreset.ultraHigh);
 
     // If the controller is updated then update the UI.
     controller.addListener(() {

@@ -257,7 +257,8 @@ class CameraController extends ValueNotifier<CameraValue> {
   }
 
   /// Stream to listen for Posenet output from the native plugins.
-  Stream<dynamic> get posenetOutputStream => _posenetOutputStream;
+  Stream<dynamic> get posenetOutputStream =>
+      _posenetOutputStream.asBroadcastStream();
 
   /// Listen to events from the native plugins.
   ///

@@ -7,6 +7,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
+import android.graphics.Matrix
+import android.hardware.SensorManager.getOrientation
 import android.hardware.camera2.*
 import android.media.CamcorderProfile
 import android.media.ImageReader
@@ -81,7 +83,7 @@ class Camera(
     @Throws(CameraAccessException::class)
     fun open(result: MethodChannel.Result) {
         pictureImageReader = ImageReader.newInstance(
-                previewSize!!.height, previewSize.width, ImageFormat.JPEG, 2)
+                previewSize!!.width, previewSize.height, ImageFormat.JPEG, 2)
 
         posenet = Posenet(activity!!)
 
@@ -214,14 +216,10 @@ class Camera(
     /** Runs [estimateSinglePose)] from posenet */
     private fun performInference(bitmap: Bitmap): HashMap<String, Any> {
         // Crop bitmap
-        val croppedBitmap = cropBitmap(bitmap)
-        Log.d(TAG, "=> croppedBitmap H: ${croppedBitmap.height}")
-        Log.d(TAG, "=> croppedBitmap W: ${croppedBitmap.width}")
+//        val croppedBitmap = cropBitmap(bitmap)
 
         // Created scaled version of bitmap for mode input
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, MODEL_WIDTH, MODEL_HEIGHT, true)
-        Log.d(TAG, "=> scaledBitmap H: ${scaledBitmap.height}")
-        Log.d(TAG, "=> scaledBitmap W: ${scaledBitmap.width}")
 
         // Return inference
         return posenet.estimateSinglePose(scaledBitmap)
@@ -236,8 +234,6 @@ class Camera(
         }
 
         val image = pictureImageReader!!.acquireLatestImage() ?: return
-        Log.d(TAG, "=> Image H: ${image.height}")
-        Log.d(TAG, "=> Image W: ${image.width}")
 
         val planes = image.planes
         val bBuffer: ByteBuffer = planes[0].buffer
@@ -247,25 +243,25 @@ class Camera(
         val imageBitmap = BitmapFactory.decodeByteArray(buffer, 0, buffer.size)
 
         // Create rotated version for portrait display
-//        val rotateMatrix = Matrix()
-//        rotateMatrix.postRotate(90.0f)
-//
-//        val rotatedBitmap = Bitmap.createBitmap(
-//                imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height,
-//                rotateMatrix, true
-//        )
-//        Log.d(TAG, "=> Rotated Bitmap Img H: ${rotatedBitmap.height}")
-//        Log.d(TAG, "=> Rotated Bitmap Img W: ${rotatedBitmap.width}")
+        val rotateMatrix = Matrix()
+        if(isFrontFacing) {
+            rotateMatrix.postRotate(270.0f)
+        } else {
+            rotateMatrix.postRotate(90.0f)
+        }
+
+        val rotatedBitmap = Bitmap.createBitmap(
+                imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height,
+                rotateMatrix, true
+        )
 
         image.close()
 
         // Perform inference
-        person = performInference(imageBitmap)
+        person = performInference(rotatedBitmap)
 
         uiThreadHandler.post(
             Runnable {
-                Log.d(TAG, "=> Output (score): ${person["score"]}")
-                Log.d(TAG, "=> Output (key points): ${person["keyPoints"]}")
                 posenetChannel.send(person)
             }
         )
@@ -320,7 +316,9 @@ class Camera(
                     }
                     cameraCaptureSession = session
                     captureRequestBuilder?.let { captureRequestBuilder!!.set(
-                            CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)}
+                            CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO
+                    )}
+
                     cameraCaptureSession!!.setRepeatingRequest(captureRequestBuilder!!.build(), null, null)
                     onSuccessCallback?.run()
                 } catch (e: CameraAccessException) {
