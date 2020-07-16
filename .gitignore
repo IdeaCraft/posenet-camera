@@ -1,70 +1,47 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
 .DS_Store
 .atom/
-.buildlog/
-.history
-.svn/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
 .idea/
-
-# Visual Studio Code related
 .vscode/
 
-# Flutter/Dart/Pub related
-**/doc/api/
-.dart_tool/
-.flutter-plugins
 .packages
-.pub-cache/
 .pub/
-/build/
+.dart_tool/
+pubspec.lock
+flutter_export_environment.sh
 
-# Android related
-example/**/android/**/gradle-wrapper.jar
-example/**/android/.gradle
-example/**/android/captures/
-example/**/android/gradlew
-example/**/android/gradlew.bat
-example/**/android/local.properties
-example/**/android/**/GeneratedPluginRegistrant.java
+examples/all_plugins/pubspec.yaml
 
-# iOS/XCode related
-example/**/ios/**/*.mode1v3
-example/**/ios/**/*.mode2v3
-example/**/ios/**/*.moved-aside
-example/**/ios/**/*.pbxuser
-example/**/ios/**/*.perspectivev3
-example/**/ios/**/*sync/
-example/**/ios/**/.sconsign.dblite
-example/**/ios/**/.tags*
-example/**/ios/**/.vagrant/
-example/**/ios/**/DerivedData/
-example/**/ios/**/Icon?
-example/**/ios/**/Pods/
-example/**/ios/**/.symlinks/
-example/**/ios/**/profile
-example/**/ios/**/xcuserdata
-example/**/ios/.generated/
-example/**/ios/Flutter/App.framework
-example/**/ios/Flutter/Flutter.framework
-example/**/ios/Flutter/Generated.xcconfig
-example/**/ios/Flutter/app.flx
-example/**/ios/Flutter/app.zip
-example/**/ios/Flutter/flutter_assets/
-example/**/ios/ServiceDefinitions.json
-example/**/ios/Runner/GeneratedPluginRegistrant.*
+Podfile
+Podfile.lock
+Pods/
+.symlinks/
+**/Flutter/App.framework/
+**/Flutter/ephemeral/
+**/Flutter/Flutter.framework/
+**/Flutter/Generated.xcconfig
+**/Flutter/flutter_assets/
 
-# Exceptions to above rules.
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+ServiceDefinitions.json
+xcuserdata/
+**/DerivedData/
+
+local.properties
+keystore.properties
+.gradle/
+gradlew
+gradlew.bat
+gradle-wrapper.jar
+.flutter-plugins-dependencies
+*.iml
+
+generated_plugin_registrant.dart
+GeneratedPluginRegistrant.h
+GeneratedPluginRegistrant.m
+GeneratedPluginRegistrant.java
+GeneratedPluginRegistrant.swift
+build/
+.flutter-plugins
+
+.project
+.classpath
+.settings
