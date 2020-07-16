@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView_example
+package io.ideacraft.posenetcamera_example
 
 import io.flutter.embedding.android.FlutterActivity
 

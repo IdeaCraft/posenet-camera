@@ -1,4 +1,4 @@
-part of 'cameraInferenceView.dart';
+part of 'posenet_camera.dart';
 
 /// A single color plane of image data.
 ///

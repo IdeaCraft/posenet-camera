@@ -1,9 +1,7 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.SystemClock
-import android.util.Log
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.gpu.GpuDelegate
 import java.io.FileInputStream

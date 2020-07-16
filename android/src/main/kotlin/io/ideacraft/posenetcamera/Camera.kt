@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.Matrix
-import android.hardware.SensorManager.getOrientation
 import android.hardware.camera2.*
 import android.media.CamcorderProfile
 import android.media.ImageReader

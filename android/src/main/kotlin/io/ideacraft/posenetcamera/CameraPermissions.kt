@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import android.Manifest.permission
 import android.app.Activity

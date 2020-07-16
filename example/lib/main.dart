@@ -1,10 +1,8 @@
-import 'dart:math';
-
-import 'package:cameraInferenceView_example/draw.dart';
+import 'package:posenetcamera_example/draw.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:cameraInferenceView/cameraInferenceView.dart';
+import 'package:posenetcamera/posenet_camera.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -73,7 +71,7 @@ class _CameraExampleState extends State<CameraExample>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CameraInferenceView'),
+        title: const Text('Posenet Camera'),
       ),
       body: Stack(
         children: <Widget>[

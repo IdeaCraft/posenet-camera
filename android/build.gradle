@@ -1,4 +1,4 @@
-group 'io.ideacraft.cameraInferenceView'
+group 'io.ideacraft.posenetcamera'
 version '1.0-SNAPSHOT'
 
 buildscript {

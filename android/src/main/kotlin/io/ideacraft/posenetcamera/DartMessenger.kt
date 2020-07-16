@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import android.text.TextUtils
 import io.flutter.plugin.common.BinaryMessenger
@@ -33,7 +33,7 @@ class DartMessenger(messenger: BinaryMessenger?, eventChannelId: Long) {
     }
 
     init {
-        EventChannel(messenger, "cameraInferenceViewPlugin/cameraEvents$eventChannelId")
+        EventChannel(messenger, "posenetCameraViewPlugin/cameraEvents$eventChannelId")
                 .setStreamHandler(
                         object : EventChannel.StreamHandler {
                             override fun onListen(arguments: Any?, sink: EventSink?) {

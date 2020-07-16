@@ -1,4 +1,4 @@
-name: cameraInferenceView
+name: posenetcamera
 description: Flutter plugin to show camera preview, run posenet on camera frames and send output as a stream.
 version: 0.0.1
 author: ideacraft.io
@@ -28,10 +28,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: io.ideacraft.cameraInferenceView
-        pluginClass: CameraInferenceViewPlugin
+        package: io.ideacraft.posenetcamera
+        pluginClass: PosenetCameraPlugin
       ios:
-        pluginClass: CameraInferenceViewPlugin
+        pluginClass: PosenetCameraPlugin
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

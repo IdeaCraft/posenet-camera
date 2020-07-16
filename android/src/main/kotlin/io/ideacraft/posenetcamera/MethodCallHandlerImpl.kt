@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import android.app.Activity
 import android.hardware.camera2.CameraAccessException
@@ -7,8 +7,8 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.view.TextureRegistry
-import io.ideacraft.cameraInferenceView.CameraPermissions.PermissionsRegistry
-import io.ideacraft.cameraInferenceView.CameraPermissions.ResultCallback
+import io.ideacraft.posenetcamera.CameraPermissions.PermissionsRegistry
+import io.ideacraft.posenetcamera.CameraPermissions.ResultCallback
 
 internal class MethodCallHandlerImpl(
         private val activity: Activity,
@@ -16,7 +16,7 @@ internal class MethodCallHandlerImpl(
         private val cameraPermissions: CameraPermissions,
         private val permissionsRegistry: PermissionsRegistry,
         private val textureRegistry: TextureRegistry) : MethodCallHandler {
-    private val methodChannel: MethodChannel = MethodChannel(messenger, "plugins/cameraInferenceView")
+    private val methodChannel: MethodChannel = MethodChannel(messenger, "posenetCameraViewPlugin/cameraInferenceView")
 //    private val posenetOutputChannel: EventChannel = EventChannel(messenger, "plugins/posenetOutputStream")
 
     private var camera: Camera? = null

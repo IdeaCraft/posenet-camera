@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,7 @@ import android.hardware.camera2.CameraMetadata
 import android.hardware.camera2.params.StreamConfigurationMap
 import android.media.CamcorderProfile
 import android.util.Size
-import io.ideacraft.cameraInferenceView.Camera.ResolutionPreset
+import io.ideacraft.posenetcamera.Camera.ResolutionPreset
 import java.util.*
 
 /** Provides various utilities for camera.  */

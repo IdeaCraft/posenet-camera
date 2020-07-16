@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import android.app.Activity
 import android.os.Build
@@ -10,11 +10,10 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener
 import io.flutter.view.TextureRegistry
-import io.ideacraft.cameraInferenceView.CameraPermissions.PermissionsRegistry
-//import org.opencv.android.OpenCVLoader
+import io.ideacraft.posenetcamera.CameraPermissions.PermissionsRegistry
 
-/** CameraInferenceViewPlugin  */
-class CameraInferenceViewPlugin : FlutterPlugin, ActivityAware {
+/** PosenetCameraPlugin  */
+class PosenetCameraPlugin : FlutterPlugin, ActivityAware {
     private var flutterPluginBinding: FlutterPluginBinding? = null
     private var methodCallHandler: MethodCallHandlerImpl? = null
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
@@ -67,9 +66,9 @@ class CameraInferenceViewPlugin : FlutterPlugin, ActivityAware {
     }
 
     companion object {
-        private const val TAG = "CameraInferenceViewPlugin"
+        private const val TAG = "posenetCameraPlugin"
         fun registerWith(registrar: Registrar) {
-            val plugin = CameraInferenceViewPlugin()
+            val plugin = PosenetCameraPlugin()
             plugin.maybeStartListening(
                     registrar.activity(),
                     registrar.messenger(), object : PermissionsRegistry {
@@ -79,9 +78,5 @@ class CameraInferenceViewPlugin : FlutterPlugin, ActivityAware {
             },
                     registrar.view())
         }
-
-//        init {
-//            OpenCVLoader.initDebug();
-//        }
     }
 }

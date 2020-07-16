@@ -1,4 +1,4 @@
-package io.ideacraft.cameraInferenceView
+package io.ideacraft.posenetcamera
 
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
@@ -16,7 +16,7 @@ class PosenetChannel(messenger: BinaryMessenger?) {
     }
 
     init {
-        EventChannel(messenger, "plugins/posenetOutputStream")
+        EventChannel(messenger, "posenetCameraViewPlugin/posenetOutputStream")
                 .setStreamHandler(
                         object : EventChannel.StreamHandler {
                             override fun onListen(arguments: Any?, sink: EventSink?) {
