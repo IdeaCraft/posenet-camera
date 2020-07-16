@@ -4,14 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
 import android.util.Log
+import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.gpu.GpuDelegate
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import kotlin.math.exp
-import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.gpu.GpuDelegate
 
 //enum class BodyPart {
 //  NOSE,
@@ -166,25 +166,25 @@ class Posenet(
    */
   @Suppress("UNCHECKED_CAST")
   fun estimateSinglePose(bitmap: Bitmap): HashMap<String, Any> {
-    val estimationStartTimeNanos = SystemClock.elapsedRealtimeNanos()
+//    val estimationStartTimeNanos = SystemClock.elapsedRealtimeNanos()
     val inputArray = arrayOf(initInputArray(bitmap))
-    Log.i(
-      "posenet",
-      String.format(
-        "Scaling to [-1,1] took %.2f ms",
-        1.0f * (SystemClock.elapsedRealtimeNanos() - estimationStartTimeNanos) / 1_000_000
-      )
-    )
+//    Log.i(
+//      "posenet",
+//      String.format(
+//        "Scaling to [-1,1] took %.2f ms",
+//        1.0f * (SystemClock.elapsedRealtimeNanos() - estimationStartTimeNanos) / 1_000_000
+//      )
+//    )
 
     val outputMap = initOutputMap(getInterpreter())
 
-    val inferenceStartTimeNanos = SystemClock.elapsedRealtimeNanos()
+//    val inferenceStartTimeNanos = SystemClock.elapsedRealtimeNanos()
     getInterpreter().runForMultipleInputsOutputs(inputArray, outputMap)
-    lastInferenceTimeNanos = SystemClock.elapsedRealtimeNanos() - inferenceStartTimeNanos
-    Log.i(
-      "posenet",
-      String.format("Interpreter took %.2f ms", 1.0f * lastInferenceTimeNanos / 1_000_000)
-    )
+//    lastInferenceTimeNanos = SystemClock.elapsedRealtimeNanos() - inferenceStartTimeNanos
+//    Log.i(
+//      "posenet",
+//      String.format("Interpreter took %.2f ms", 1.0f * lastInferenceTimeNanos / 1_000_000)
+//    )
 
     val heatmaps = outputMap[0] as Array<Array<Array<FloatArray>>>
     val offsets = outputMap[1] as Array<Array<Array<FloatArray>>>

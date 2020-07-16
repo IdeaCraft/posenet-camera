@@ -44,7 +44,7 @@ class Draw extends StatelessWidget {
           left: k["score"] > 0.3 ? double.parse(_x.toString()) : -1000,
           top: k["score"] > 0.3 ? double.parse(_y.toString()) : -1000,
           width: 10,
-          height: 15,
+          height: 20,
           child: Container(
             child: Text(
               "●", //${k["score"]}",

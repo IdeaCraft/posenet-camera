@@ -75,72 +75,77 @@ class _CameraExampleState extends State<CameraExample>
       appBar: AppBar(
         title: const Text('CameraInferenceView'),
       ),
-      body: Column(
+      body: Stack(
         children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  child: Center(
-                    child:
-                        (controller == null || !controller.value.isInitialized)
-                            ? Text(
-                                'Camera Initializing',
-                                style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: 24.0,
-                                ),
-                              )
-                            : AspectRatio(
-                                aspectRatio: controller.value.aspectRatio,
-                                child: CameraPreview(controller),
-                              ),
-                  ),
-                ),
-                (controller == null || !controller.value.isInitialized)
-                    ? Container()
-                    : StreamBuilder(
-                        stream: controller.posenetOutputStream,
-                        builder: (context, snapshot) {
-                          return Draw(
-                            results: snapshot.data == null || !snapshot.hasData
-                                ? []
-                                : snapshot.data['keyPoints'],
-                            previewH: 320,
-                            previewW: 240,
-                            screenH: screen.height,
-                            screenW: screen.width,
-                            isFrontFacing:
-                                controller.description.lensDirection ==
-                                    CameraLensDirection.front,
-                          );
-                        }),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                _cameraTogglesRowWidget(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 32.0),
-                  child: (controller == null || !controller.value.isInitialized)
-                      ? Text('Not Inititlized')
-                      : StreamBuilder<dynamic>(
-                          stream: controller.posenetOutputStream,
-                          builder: (context, snapshot) {
-                            if (snapshot.data == null || !snapshot.hasData) {
-                              return Text('0.0');
-                            }
-                            return Text(
-                              '${snapshot.data['score']}',
-                            );
-                          },
+          Stack(
+            children: <Widget>[
+              Center(
+                child: (controller == null || !controller.value.isInitialized)
+                    ? Text(
+                        'Camera Initializing',
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 24.0,
                         ),
-                ),
-              ],
+                      )
+                    : AspectRatio(
+                        aspectRatio: controller.value.aspectRatio,
+                        child: CameraPreview(controller),
+                      ),
+              ),
+              (controller == null || !controller.value.isInitialized)
+                  ? Container()
+                  : Center(
+                      child: AspectRatio(
+                        aspectRatio: controller.value.aspectRatio,
+                        child: StreamBuilder(
+                            stream: controller.posenetOutputStream,
+                            builder: (context, snapshot) {
+                              return Draw(
+                                results:
+                                    snapshot.data == null || !snapshot.hasData
+                                        ? []
+                                        : snapshot.data['keyPoints'],
+                                previewH: 320,
+                                previewW: 240,
+                                screenH: screen.height,
+                                screenW: screen.width,
+                                isFrontFacing:
+                                    controller.description.lensDirection ==
+                                        CameraLensDirection.front,
+                              );
+                            }),
+                      ),
+                    ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  _cameraTogglesRowWidget(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 32.0),
+                    child: (controller == null ||
+                            !controller.value.isInitialized)
+                        ? Text('Not Inititlized')
+                        : StreamBuilder<dynamic>(
+                            stream: controller.posenetOutputStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.data == null || !snapshot.hasData) {
+                                return Text('0.0');
+                              }
+                              return Text(
+                                '${snapshot.data['score']}',
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

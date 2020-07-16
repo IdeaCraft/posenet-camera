@@ -11,7 +11,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener
 import io.flutter.view.TextureRegistry
 import io.ideacraft.cameraInferenceView.CameraPermissions.PermissionsRegistry
-import org.opencv.android.OpenCVLoader
+//import org.opencv.android.OpenCVLoader
 
 /** CameraInferenceViewPlugin  */
 class CameraInferenceViewPlugin : FlutterPlugin, ActivityAware {
@@ -80,8 +80,8 @@ class CameraInferenceViewPlugin : FlutterPlugin, ActivityAware {
                     registrar.view())
         }
 
-        init {
-            OpenCVLoader.initDebug();
-        }
+//        init {
+//            OpenCVLoader.initDebug();
+//        }
     }
 }
