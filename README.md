@@ -1,6 +1,6 @@
-# cameraInferenceView
+# camera-inference-view
 
-A new flutter plugin project.
+Flutter plugin to show camera preview, run PoseNet on camera frames and send output as a stream.
 
 ## Getting Started
 
