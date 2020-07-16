@@ -1,7 +1,7 @@
 name: cameraInferenceView
-description: A new flutter plugin project.
+description: Flutter plugin to show camera preview, run posenet on camera frames and send output as a stream.
 version: 0.0.1
-author:
+author: ideacraft.io
 homepage:
 
 environment:
