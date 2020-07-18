@@ -32,7 +32,7 @@ class PosenetCameraPlugin : FlutterPlugin, ActivityAware {
                 binding.addRequestPermissionsResultListener(handler!!)
             }
         },
-                flutterPluginBinding!!.flutterEngine.renderer)
+                flutterPluginBinding!!.textureRegistry)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
