@@ -16,8 +16,7 @@ internal class MethodCallHandlerImpl(
         private val cameraPermissions: CameraPermissions,
         private val permissionsRegistry: PermissionsRegistry,
         private val textureRegistry: TextureRegistry) : MethodCallHandler {
-    private val methodChannel: MethodChannel = MethodChannel(messenger, "posenetCameraViewPlugin/cameraInferenceView")
-//    private val posenetOutputChannel: EventChannel = EventChannel(messenger, "plugins/posenetOutputStream")
+    private val methodChannel: MethodChannel = MethodChannel(messenger, "posenetCameraPlugin/posenetCamera")
 
     private var camera: Camera? = null
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

@@ -1,4 +1,4 @@
-name: posenetcamera
+name: posenet_camera
 description: Flutter plugin to show camera preview, run posenet on camera frames and send output as a stream.
 version: 0.0.1
 author: ideacraft.io

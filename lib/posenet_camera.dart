@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 part 'camera_image.dart';
 
 final MethodChannel _channel =
-    const MethodChannel('posenetCameraViewPlugin/cameraInferenceView');
+    const MethodChannel('posenetCameraPlugin/posenetCamera');
 
 enum CameraLensDirection { front, back, external }
 
@@ -246,7 +246,7 @@ class CameraController extends ValueNotifier<CameraValue> {
       throw CameraException(e.code, e.message);
     }
     _posenetOutputStream =
-        EventChannel('posenetCameraViewPlugin/posenetOutputStream')
+        EventChannel('posenetCameraPlugin/posenetOutputStream')
             .receiveBroadcastStream();
 
     _eventSubscription =

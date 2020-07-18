@@ -2,7 +2,7 @@ import 'package:posenetcamera_example/draw.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:posenetcamera/posenet_camera.dart';
+import 'package:posenet_camera/posenet_camera.dart';
 
 List<CameraDescription> cameras = [];
 

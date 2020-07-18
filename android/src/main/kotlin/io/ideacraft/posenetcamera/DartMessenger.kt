@@ -33,7 +33,7 @@ class DartMessenger(messenger: BinaryMessenger?, eventChannelId: Long) {
     }
 
     init {
-        EventChannel(messenger, "posenetCameraViewPlugin/cameraEvents$eventChannelId")
+        EventChannel(messenger, "posenetCameraPlugin/cameraEvents$eventChannelId")
                 .setStreamHandler(
                         object : EventChannel.StreamHandler {
                             override fun onListen(arguments: Any?, sink: EventSink?) {

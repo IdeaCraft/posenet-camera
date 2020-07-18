@@ -16,7 +16,7 @@ class PosenetChannel(messenger: BinaryMessenger?) {
     }
 
     init {
-        EventChannel(messenger, "posenetCameraViewPlugin/posenetOutputStream")
+        EventChannel(messenger, "posenetCameraPlugin/posenetOutputStream")
                 .setStreamHandler(
                         object : EventChannel.StreamHandler {
                             override fun onListen(arguments: Any?, sink: EventSink?) {
