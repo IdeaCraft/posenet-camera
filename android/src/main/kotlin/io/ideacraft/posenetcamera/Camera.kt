@@ -409,6 +409,6 @@ class Camera(
         val preset = ResolutionPreset.valueOf(resolutionPreset!!)
         recordingProfile = CameraUtils.getBestAvailableCamcorderProfileForResolutionPreset(cameraName, preset)
         captureSize = Size(recordingProfile.videoFrameWidth, recordingProfile.videoFrameHeight)
-        previewSize = CameraUtils.computeBestPreviewSize(cameraName, preset)
+        previewSize = CameraUtils.computeBestPreviewSize(cameraName)
     }
 }

@@ -15,20 +15,10 @@ import java.util.*
 
 /** Provides various utilities for camera.  */
 object CameraUtils {
-    fun computeBestPreviewSize(cameraName: String?, preset: ResolutionPreset): Size {
-        var preset = preset
-        if (preset.ordinal > ResolutionPreset.high.ordinal) {
-            preset = ResolutionPreset.low
-        }
+    fun computeBestPreviewSize(cameraName: String?): Size {
+        val preset = ResolutionPreset.low
         val profile = getBestAvailableCamcorderProfileForResolutionPreset(cameraName, preset)
         return Size(profile.videoFrameWidth, profile.videoFrameHeight)
-    }
-
-    fun computeBestCaptureSize(streamConfigurationMap: StreamConfigurationMap): Size {
-        // For still image captures, we use the largest available size.
-        return Collections.max(
-                listOf(*streamConfigurationMap.getOutputSizes(ImageFormat.JPEG)),
-                CompareSizesByArea())
     }
 
     @Throws(CameraAccessException::class)
