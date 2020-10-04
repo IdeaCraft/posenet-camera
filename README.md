@@ -55,3 +55,10 @@ Android and/or iOS.
 For help getting started with Flutter, view the
 [online documentation](https://flutter.dev/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
+
+## Contribution
+
+*Note*: This plugin is still under development, and some APIs might not be available yet.
+
+[Feedback, Issues](https://github.com/IdeaCraft/posenet-camera/issues) and
+[Pull Requests](https://github.com/IdeaCraft/posenet-camera/pulls) are most welcome!
