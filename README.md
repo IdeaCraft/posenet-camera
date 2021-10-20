@@ -1,8 +1,8 @@
 # posenet-camera
 
-Flutter plugin to show camera preview, run PoseNet on camera frames and send output as a stream.
+Flutter plugin to show camera preview, run PoseNet on camera frames and send output as a stream of keypoint-coordinates.
 
-*Note*: This plugin is still under development, and some APIs might not be available yet.
+*Note*: This plugin is still under development, and some APIs might not be available yet!
 
 
 ## Features:
@@ -33,7 +33,7 @@ Or in text format add the key:
 
 ```xml
 <key>NSCameraUsageDescription</key>
-<string>Can I use the camera please??</string>
+<string>Can I use the camera please?</string>
 ```
 
 ### Android
@@ -47,12 +47,12 @@ minSdkVersion 21
 
 ## Example
 
-For a more elaborate usage example see [here](https://github.com/IdeaCraft/posenet-camera/tree/master/example).
+For a more elaborate usage example see [this](https://github.com/IdeaCraft/posenet-camera/tree/master/example).
 
 
 ## Contribution
 
-*Note*: This plugin is still under development, and some APIs might not be available yet.
+*Note*: This plugin is still under development, and some APIs might not be available yet!
 
 [Feedback, Issues](https://github.com/IdeaCraft/posenet-camera/issues) and
 [Pull Requests](https://github.com/IdeaCraft/posenet-camera/pulls) are most welcome!
